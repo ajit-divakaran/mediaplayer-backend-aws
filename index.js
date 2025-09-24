@@ -1,25 +1,49 @@
-// import json server
-const jsonserver = require('json-server')
+// index.js
 
-//create server
-const mediaPlayerServer = jsonserver.create()
+// Import json-server and cors
+const jsonServer = require('json-server');
+const cors = require('cors');
 
-// create middleware to convert the json format
-const middleware = jsonserver.defaults()
+// Create the server
+const mediaPlayerServer = jsonServer.create();
 
-// set port for the server
-const PORT = 4000 || process.env.PORT
+// Set up the router to your db.json file
+const router = jsonServer.router('db.json');
 
-// import db.json file
-const router = jsonserver.router("db.json")
+// Get default middlewares from json-server, but with noCORS disabled.
+// We'll handle CORS ourselves with the 'cors' package.
+const middlewares = jsonServer.defaults();
 
-// server use middleware
-mediaPlayerServer.use(middleware) // order: 1
-mediaPlayerServer.use(router) // 2
+// Set a specific port for the server
+const PORT = 4000 || process.env.PORT;
 
+// Whitelist the specific Amplify frontend domain for security
+// You can add more domains to this array if needed
+const allowedOrigins = [
+  'https://main.d2d8lni605i7wz.amplifyapp.com'
+];
 
-// listen
-mediaPlayerServer.listen(PORT,()=>{
-    console.log(`server running successfully at port number ${PORT}`)
+// Configure CORS options
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+// Use the CORS middleware before the JSON-Server router
+mediaPlayerServer.use(cors(corsOptions));
+
+// Use the default JSON-Server middlewares
+mediaPlayerServer.use(middlewares);
+
+// Use the router
+mediaPlayerServer.use(router);
+
+// Listen on the specified port
+mediaPlayerServer.listen(PORT, () => {
+  console.log(`JSON-Server is running on port ${PORT}`);
 });
-
