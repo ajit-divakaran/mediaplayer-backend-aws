@@ -20,7 +20,7 @@ const PORT = 4000 || process.env.PORT;
 // Whitelist the specific Amplify frontend domain for security
 // You can add more domains to this array if needed
 const allowedOrigins = [
-  'https://main.d2d8lni605i7wz.amplifyapp.com'
+  'https://main.d28cuyvuvwde3v.amplifyapp.com'
 ];
 
 // Configure CORS options
