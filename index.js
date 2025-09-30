@@ -15,7 +15,7 @@ const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
 // Set a specific port for the server
-const PORT = 4000 || process.env.PORT;
+const PORT = process.env.PORT || 4000;
 
 // Whitelist the specific Amplify frontend domain for security
 // You can add more domains to this array if needed
@@ -23,15 +23,21 @@ const allowedOrigins = [
   'https://main.d28cuyvuvwde3v.amplifyapp.com'
 ];
 
-// Configure CORS options
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // Allow requests without origin (like preflight, curl, Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.error("CORS blocked origin:", origin);
+      callback(new Error("Not allowed by CORS"));
     }
-  }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 };
 
 // Use the CORS middleware before the JSON-Server router
