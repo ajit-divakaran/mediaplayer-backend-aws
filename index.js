@@ -19,29 +19,29 @@ const PORT = process.env.PORT || 4000;
 
 // Whitelist the specific Amplify frontend domain for security
 // You can add more domains to this array if needed
-const allowedOrigins = [
-  'https://main.d28cuyvuvwde3v.amplifyapp.com'
-];
+// const allowedOrigins = [
+//   'https://main.d28cuyvuvwde3v.amplifyapp.com'
+// ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests without origin (like preflight, curl, Postman)
-    if (!origin) return callback(null, true);
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     // Allow requests without origin (like preflight, curl, Postman)
+//     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error("CORS blocked origin:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
-};
+//     if (allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       console.error("CORS blocked origin:", origin);
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true,
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+// };
 
 // Use the CORS middleware before the JSON-Server router
-mediaPlayerServer.use(cors(corsOptions));
+mediaPlayerServer.use(cors());
 
 // Use the default JSON-Server middlewares
 mediaPlayerServer.use(middlewares);
