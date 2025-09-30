@@ -41,7 +41,13 @@ const PORT = process.env.PORT || 4000;
 // };
 
 // Use the CORS middleware before the JSON-Server router
-mediaPlayerServer.use(cors());
+mediaPlayerServer.use(cors({
+  origin: 'https://main.d28cuyvuvwde3v.amplifyapp.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  maxAge: 86400 // 24 hours
+}));
 
 // Use the default JSON-Server middlewares
 mediaPlayerServer.use(middlewares);
